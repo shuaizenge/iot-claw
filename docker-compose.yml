@@ -1,0 +1,73 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: iot-claw-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: iot_claw
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d iot_claw']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: iot-claw-influxdb
+    restart: unless-stopped
+    ports:
+      - '8086:8086'
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: adminadmin
+      DOCKER_INFLUXDB_INIT_ORG: iot-claw
+      DOCKER_INFLUXDB_INIT_BUCKET: device_telemetry
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: replace-me
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    healthcheck:
+      test: ['CMD', 'influx', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: iot-claw-pgadmin
+    restart: unless-stopped
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: adminadmin
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: 'False'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: iot-claw-mosquitto
+    restart: unless-stopped
+    ports:
+      - '1883:1883'
+      - '9001:9001'
+    volumes:
+      - ./infra/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+volumes:
+  postgres_data:
+  influxdb_data:
+  influxdb_config:
+  mosquitto_data:
+  mosquitto_log:

@@ -1,0 +1,67 @@
+{
+  "id": "iot-claw",
+  "name": "iot-claw Control Plane",
+  "description": "Operate an iot-claw control plane through native OpenClaw tools.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "minLength": 1
+      },
+      "apiToken": {
+        "type": "string",
+        "minLength": 1
+      },
+      "timeoutMs": {
+        "type": "integer",
+        "minimum": 1000
+      },
+      "defaultTenant": {
+        "type": "string",
+        "minLength": 1
+      },
+      "defaultSite": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "uiHints": {
+    "baseUrl": {
+      "label": "iot-claw Base URL",
+      "help": "HTTP base URL for the iot-claw control plane, for example http://127.0.0.1:8080."
+    },
+    "apiToken": {
+      "label": "API Token",
+      "help": "Optional Bearer token used for /api/plugin/* requests.",
+      "sensitive": true
+    },
+    "timeoutMs": {
+      "label": "Timeout Milliseconds",
+      "help": "HTTP timeout for each control-plane request."
+    },
+    "defaultTenant": {
+      "label": "Default Tenant",
+      "help": "Optional default tenant used when a tool call does not pass one explicitly."
+    },
+    "defaultSite": {
+      "label": "Default Site",
+      "help": "Optional default site used when a tool call does not pass one explicitly."
+    }
+  },
+  "contracts": {
+    "tools": [
+      "iot_list_devices",
+      "iot_get_device",
+      "iot_get_device_state",
+      "iot_list_device_capabilities",
+      "iot_get_device_telemetry_history",
+      "iot_list_device_alerts",
+      "iot_list_device_actions",
+      "iot_execute_device_action",
+      "iot_get_command_status"
+    ]
+  }
+}

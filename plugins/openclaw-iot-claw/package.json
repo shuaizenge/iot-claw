@@ -1,0 +1,17 @@
+{
+  "name": "@iot-claw/openclaw-plugin",
+  "version": "0.0.5",
+  "description": "OpenClaw plugin for iot-claw control plane",
+  "type": "module",
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.41"
+  },
+  "peerDependencies": {
+    "openclaw": "*"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}
