@@ -125,7 +125,7 @@ iot-claw/
 
 相关文档：
 
-- [doc/guide/用户指导.md](doc/guide/用户指导.md)
+- [doc/guide/如何对接openclaw.md](doc/guide/如何对接openclaw.md)
 
 典型插件配置示例：
 
@@ -140,9 +140,8 @@ openclaw config set plugins.entries.iot-claw.config.baseUrl "http://127.0.0.1:80
 推荐阅读顺序：
 
 1. [doc/核心思想.md](doc/核心思想.md)
-2. [doc/guide/用户指导.md](doc/guide/用户指导.md)
-3. [doc/guide/开发者指导.md](doc/guide/开发者指导.md)
-4. [doc/协议/iot-claw协议定义.md](doc/协议/iot-claw协议定义.md)
+2. [doc/guide/如何对接openclaw.md](doc/guide/如何对接openclaw.md)
+3. [doc/协议/iot-claw协议定义.md](doc/协议/iot-claw协议定义.md)
 
 ## 交流群
 
