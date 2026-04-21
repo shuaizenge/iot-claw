@@ -1,100 +1,151 @@
-# iot-claw
+<div align="center">
 
-`iot-claw` 是一个面向 Agent 时代的 IoT 控制平面。
+<h1>iot-claw: Agent 时代的 IoT 智能控制系统</h1>
 
-它不是传统意义上的设备看板，也不只是一个 MQTT 数据接入服务。它的目标，是让资源受限的联网设备以稳定协议接入宿主侧控制面，成为智能体系统中的终端节点。
+<h3>Agent自动编排 · 状态/遥测存储 · 命令审批审计 · MCP 工具 · OpenClaw 集成</h3>
 
-在 `iot-claw` 里：
+</div>
 
-- 人表达目标，而不是逐步操作设备
-- Agent 负责理解、编排和协同
-- `iot-claw` 负责协议、策略、审计和控制边界
-- 设备负责感知现实世界并执行动作
+## 简介
 
-更多理念见 `doc/manifesto.md`。
+**iot-claw** 是一个面向 Agent 时代的 IoT 智能控制系统。
 
-## 核心思想
+## 它解决的问题：
+1. 支持使用手机端通过命令agent直接控制自己的嵌入式设备。
+2. 让agent获取物联网设备上报的数据来自动分析设备获取信息的最新情况和走向。
+3. 让agent自动运维物联网设备，自动分析上报设备的异常情况。
+4. 配合openclaw等智能体，成为你agent工作流的一个部分。
 
-- 未来的大多数联网设备，都会逐渐成为智能体系统中的终端节点
-- 不是每个设备都适合直接运行 `openclaw` 这样的完整 Agent runtime
-- 真正可落地的路径，是“轻量设备 + 宿主侧控制平面 + Agent 编排”
-- 设备暴露的重点不只是数据，而是可被调度、约束和审计的能力
-- Agent 越强，现实世界的命令边界、审批机制和审计链路就越重要
 
-## 常用场景
+设计核心思想见：[doc/核心思想.md](doc/核心思想.md)。
 
-- 用 MQTT 接入传感器、边缘网关、继电器模组、控制器等设备
-- 为设备建立统一的状态、告警、遥测、命令和审计链路
-- 让 `openclaw` 通过原生插件或 bridge 调用设备能力
-- 在控制面上增加命令分级、审批和运行记录，避免高风险动作失控
-- 为“Agent 调度现实硬件”提供一个稳定的宿主侧入口
+## 快速开始
+注：当前仅支持“linux操作系统”
 
-## 面向两类使用者
+运行时要求：
+- Node.js `20+`
+- Docker / Docker Compose
 
-### 普通用户
-
-`iot-claw` 期望的普通用户使用方式，是通过 npm 直接安装后使用，而不是阅读大量源码或手动拼接运行环境。
-
-换句话说，普通用户关心的是：
-
-- 安装
-- 配置
-- 启动
-- 接入设备
-- 调用控制面能力
-
-相关文档入口：
-
-- `doc/guide/quick-start.md` - 快速上手
-- `doc/guide/user-guide.md` - 普通用户使用说明
-- `doc/guide/api.md` - HTTP API 与控制面接口
-
-### 开发者
-
-开发者的使用方式，则是在本地安装仓库、启动基础设施、运行调试、联调 bridge，并进行测试和扩展开发。
-
-开发者通常会这样进入项目：
-
-1. 先读 `doc/manifesto.md` 理解项目边界和方向
-2. 再读 `doc/guide/architecture.md` 理解主链路和模块职责
-3. 用 `doc/guide/developer-guide.md` 了解开发约定、配置和 bridge 集成方式
-4. 用 `doc/guide/testing.md` 跑通本地联调和测试链路
-
-## 当前仓库里的快速上手
-
-1. 安装依赖：`npm install`
-2. 复制环境变量：`cp .env.example .env`
-3. 启动基础设施：`npm run infra:up`
-4. 启动服务：`npm run dev`
-5. 启动 MQTT 模拟设备：`npm run test:mqtt-connect`
-
-注意：`.env` 中的 `MQTT_TOPIC_FILTER` 必须写成 `"iot/+/+/+/#"`，否则 `#` 会被当成注释。
-
-常用命令：
+推荐的本地联调路径：
 
 ```bash
-npm run dev
-npm run build
-npm run typecheck
+# git克隆项目
+git clone https://gitee.com/openLuat/iot-claw.git
+# 进入项目目录
+cd iot-claw
+# 安装依赖
+npm install
+# 复制环境配置
+cp .env.example .env
+# 启动基础环境（需要先安装docker）
 npm run infra:up
-npm run infra:logs
-npm run infra:down
+# 启动项目
+npm run dev
+
+# (可选)运行pc模拟器设备发送消息
 npm run test:mqtt-connect
 ```
 
-## 详细文档
+默认服务入口：
 
-- `doc/guide/README.md` - 文档索引
-- `doc/guide/quick-start.md` - 快速开始
-- `doc/guide/user-guide.md` - 用户视角使用指南
-- `doc/guide/developer-guide.md` - 开发者指南
-- `doc/guide/architecture.md` - 架构说明
-- `doc/guide/testing.md` - 测试与联调方法
-- `doc/guide/api.md` - HTTP API 说明
+- HTTP 控制网页端: `http://127.0.0.1:8080`
+- MQTT broker: `mqtt://127.0.0.1:1883`
 
-## 当前状态
+注意：
 
-- 当前 `package.json` 版本为 `0.0.5`
-- 项目方向已经进入从“设备接入层”向“Agent 驱动控制平面”演进的阶段
-- 面向普通用户的目标形态是“npm 安装即可使用”
-- 当前默认推荐联调目标为 `openclaw`
+- 首次联调建议先用仓库内模拟器
+
+## 常用命令
+
+```bash
+# 启动开发模式
+npm run dev
+# 项目编译 TypeScript 到 `dist/`
+npm run build
+# 项目类型检查
+npm run typecheck
+
+# 项目基础环境，启动本地 PostgreSQL / InfluxDB / MQTT
+npm run infra:up
+# 项目基础环境日志
+npm run infra:logs
+# 项目基础环境关闭
+npm run infra:down
+
+# 运行基础 MQTT 设备模拟
+npm run test:mqtt-connect
+# 运行协议 1.0 端到端模拟器
+npm run test:protocol-v1
+```
+
+## 当前能力
+
+- MQTT 设备接入与消息分类
+- 设备主数据、状态、告警、命令、审计信息存储到 PostgreSQL
+- 遥测写入 InfluxDB
+- HTTP control plane 与内置中文 Web UI
+- MCP 工具注册与执行
+- 命令分级、审批、命令执行回执
+- Agent bridge 与 `openclaw` 集成
+
+## 仓库结构
+
+```text
+iot-claw/
+├── src/
+│   ├── bridge/        # Agent runtime bridge / openclaw dispatcher
+│   ├── http/          # HTTP control plane 与 Web UI
+│   ├── jobs/          # 巡检、日报、bridge job 调度
+│   ├── mcp/           # MCP 工具定义与执行
+│   ├── policy/        # 命令分级、审批、审计策略
+│   ├── services/      # MQTT、Postgres、Influx、控制面等核心服务
+│   └── types/         # 类型与补充声明
+├── plugins/
+│   └── openclaw-iot-claw/   # OpenClaw 原生插件
+├── test/
+│   ├── pc_Simulation/
+│   ├── protocol_test/
+│   └── luatos/
+├── doc/
+│   ├── guide/
+│   └── 协议/
+└── docker-compose.yml
+```
+# 设备协议说明
+
+完整协议说明见 [doc/协议/iot-claw协议定义.md](doc/协议/iot-claw协议定义.md)。
+
+## OpenClaw 集成
+
+当前默认推荐通过原生插件接入 `openclaw`，而不是把 `iot-claw` 当成 OpenClaw 内部模块硬耦合进去。
+
+插件目录：
+
+- [plugins/openclaw-iot-claw/](plugins/openclaw-iot-claw)
+
+相关文档：
+
+- [doc/guide/用户指导.md](doc/guide/用户指导.md)
+
+典型插件配置示例：
+
+```bash
+openclaw plugins install -l /home/username/project/iot-claw/plugins/openclaw-iot-claw
+openclaw plugins enable iot-claw
+openclaw config set plugins.entries.iot-claw.config.baseUrl "http://127.0.0.1:8080"
+```
+
+## 文档索引
+
+推荐阅读顺序：
+
+1. [doc/核心思想.md](doc/核心思想.md)
+2. [doc/guide/用户指导.md](doc/guide/用户指导.md)
+3. [doc/guide/开发者指导.md](doc/guide/开发者指导.md)
+4. [doc/协议/iot-claw协议定义.md](doc/协议/iot-claw协议定义.md)
+
+## 交流群
+
+扫码加入社群讨论：
+
+![iot-claw 交流群](doc/img/群二维码.png)
