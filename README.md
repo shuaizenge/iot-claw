@@ -19,6 +19,16 @@
 
 设计核心思想见：[doc/核心思想.md](doc/核心思想.md)。
 
+## 操作演示
+1. 外设控制（通过gpio控制led灯）
+
+<video src="doc/视频/led控制.mp4" controls width="720">
+  您的浏览器不支持在 Markdown 中直接播放视频，请点击下载查看：<a href="doc/视频/led控制.mp4">led控制.mp4</a>
+</video>
+
+[▶ 点击查看演示视频：led控制.mp4](doc/视频/led控制.mp4)
+
+
 ## 快速开始
 注：当前仅支持“linux操作系统”
 
