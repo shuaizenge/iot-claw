@@ -147,4 +147,4 @@ openclaw config set plugins.entries.iot-claw.config.baseUrl "http://127.0.0.1:80
 
 扫码加入社群讨论：
 
-![iot-claw 交流群](doc/img/群二维码.png)
+![iot-claw 交流群](doc/img/iotclaw技术讨论群.png)
